@@ -2,8 +2,10 @@
 
 require_once 'backend/config.php';
 
-$isLoggedIn = true;
+$isLoggedIn = false;
 require_once 'frontend/header.php';
+
+
 
 if ($isLoggedIn) {
     require_once 'frontend/navbaruser.php';
