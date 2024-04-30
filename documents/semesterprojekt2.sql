@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 17. Apr 2023 um 12:47
--- Server-Version: 10.4.25-MariaDB
--- PHP-Version: 8.1.10
+-- Erstellungszeit: 30. Apr 2024 um 15:47
+-- Server-Version: 10.4.27-MariaDB
+-- PHP-Version: 8.1.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Datenbank: `bifwebscripting`
+-- Datenbank: `semesterprojekt2`
 --
 
 -- --------------------------------------------------------
@@ -35,7 +35,20 @@ CREATE TABLE `appointments` (
   `vote_start` datetime NOT NULL DEFAULT current_timestamp(),
   `vote_end` datetime NOT NULL,
   `creator_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Daten für Tabelle `appointments`
+--
+
+INSERT INTO `appointments` (`ap_id`, `ap_name`, `location`, `description`, `vote_start`, `vote_end`, `creator_name`) VALUES
+(6, 'Treffen', 'FH Technikum', 'Kleines casual treffen oder so', '2024-04-01 11:11:00', '2024-04-02 11:11:00', 'Viktor'),
+(7, 'Neues Treffen', 'Irgendwo', '\"Spontanes\" Treffen', '2024-04-29 11:11:00', '2024-05-05 11:11:00', 'Viktor'),
+(8, 'Neues Treffen NEU', 'Irgendwo', '\"Spontanes\" Treffen', '2024-04-29 11:11:00', '2024-05-05 11:11:00', 'Viktor'),
+(9, 'Neues Treffen NEU NEU', 'Neues Treffen NEU NEU', 'Neues Treffen NEU NEU', '2024-04-29 11:11:00', '2024-05-04 11:11:00', 'Neues Treffen NEU NEU'),
+(10, 'Neues Treffen NEU NEU FIXED', 'Neues Treffen NEU NEU', 'Neues Treffen NEU NEU', '2024-04-29 11:11:00', '2024-05-04 11:11:00', 'Neues Treffen NEU NEU'),
+(11, 'newtest', 'newtest', 'newtest', '2024-04-03 11:01:00', '2024-05-04 11:01:00', 'sfds'),
+(12, 'aaaaaaaaa', 'newtaaaaaaaaaest', 'aaaaaaaaa', '2024-03-11 11:11:00', '2024-05-05 11:11:00', 'aaaaaaaaa');
 
 -- --------------------------------------------------------
 
@@ -48,7 +61,17 @@ CREATE TABLE `comments` (
   `ap_id` int(11) NOT NULL,
   `author_name` varchar(255) NOT NULL,
   `comment_text` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Daten für Tabelle `comments`
+--
+
+INSERT INTO `comments` (`c_id`, `ap_id`, `author_name`, `comment_text`) VALUES
+(2, 10, 'Viktor', 'Commit ohne auswahl'),
+(3, 10, 'Viktor', 'Comment mit auswahl'),
+(4, 10, 'Kohle', 'Test'),
+(5, 10, 'Max', 'Kann nur zur letzten halaben stunde oder so');
 
 -- --------------------------------------------------------
 
@@ -61,7 +84,23 @@ CREATE TABLE `options` (
   `ap_id` int(11) NOT NULL,
   `op_start` datetime NOT NULL,
   `op_end` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Daten für Tabelle `options`
+--
+
+INSERT INTO `options` (`op_id`, `ap_id`, `op_start`, `op_end`) VALUES
+(3, 6, '2024-05-01 11:00:00', '2024-05-01 11:59:00'),
+(4, 6, '2024-05-02 11:00:00', '2024-05-02 11:59:00'),
+(5, 10, '2024-05-04 11:11:00', '2024-05-04 12:11:00'),
+(6, 10, '2024-05-03 11:11:00', '2024-05-03 12:11:00'),
+(7, 11, '2024-05-01 11:11:00', '2024-05-01 12:11:00'),
+(8, 11, '2024-05-03 11:11:00', '2024-05-03 12:11:00'),
+(9, 11, '2024-05-02 11:11:00', '2024-05-02 12:11:00'),
+(10, 12, '2024-05-01 11:11:00', '2024-05-01 12:11:00'),
+(11, 12, '2024-05-02 11:11:00', '2024-05-02 12:11:00'),
+(12, 12, '2024-05-03 11:11:00', '2024-05-03 12:11:00');
 
 -- --------------------------------------------------------
 
@@ -74,7 +113,20 @@ CREATE TABLE `votings` (
   `ap_id` int(11) NOT NULL,
   `op_id` int(11) NOT NULL,
   `voter_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Daten für Tabelle `votings`
+--
+
+INSERT INTO `votings` (`v_id`, `ap_id`, `op_id`, `voter_name`) VALUES
+(1, 10, 6, 'Viktor'),
+(2, 10, 5, 'Kevin'),
+(3, 10, 6, 'Kevin'),
+(4, 10, 5, 'Kohle'),
+(5, 10, 6, 'Kohle'),
+(6, 10, 5, 'Max'),
+(7, 10, 6, 'Max');
 
 --
 -- Indizes der exportierten Tabellen
@@ -116,25 +168,25 @@ ALTER TABLE `votings`
 -- AUTO_INCREMENT für Tabelle `appointments`
 --
 ALTER TABLE `appointments`
-  MODIFY `ap_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ap_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT für Tabelle `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `c_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `c_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT für Tabelle `options`
 --
 ALTER TABLE `options`
-  MODIFY `op_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `op_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT für Tabelle `votings`
 --
 ALTER TABLE `votings`
-  MODIFY `v_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `v_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints der exportierten Tabellen
