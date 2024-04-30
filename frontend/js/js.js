@@ -156,11 +156,12 @@ function savetoDatabase() {
     data: { method: "createNewAppointment", param: data },
     dataType: "json",
     success: function (response) {
-      alert("Appointment saved successfully!");
       // get the last insert ID from the response
       var ap_id = response[1];
       // also save the given time slot options into the Options table
       saveOptions(ap_id);
+      alert("Created Appointment");
+      window.location.reload();
     },
     error: function (err) {
       console.log(err);
@@ -190,6 +191,7 @@ function voting() {
         data: { method: "createNewVoting", param: data },
         dataType: "json",
         success: function (response) {
+          alert("Voting Successfull");
           window.location.reload();
         },
         error: function (err) {
@@ -199,7 +201,7 @@ function voting() {
     }
   }
   else {
-    alert("Please tick atleast one option")
+    alert("You have not chosen an option, if this was a mistake please chose one")
   }
   $("#voter").val("") //set back to empty
 }
