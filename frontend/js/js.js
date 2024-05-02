@@ -117,7 +117,7 @@ function addOptionToDetails(id) {
         optionItem.append(input).append(label);
         optionDiv.append(optionItem);
       });
-      $('.appointment.option').html('<h2>voteable appointment options:</h2>');
+      $('.appointment.option').html('<h3>voteable appointment options:</h3>');
       $('.appointment.option').append(optionDiv);
     },
     error: function (err) {
