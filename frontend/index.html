@@ -25,7 +25,7 @@
   </header>
   <div class="wrapper">
     <div class="h2">
-      <h2>List of all Appointments</h2>
+      <h3>List of all Appointments</h3>
     </div>
     <div class="list-group" id="appointments-list"></div>
     <div class="Details" style="display: none">
@@ -49,7 +49,7 @@
           <label for="voter-comment" class="form-label">Comment</label>
           <input type="text" class="form-control" id="voter-comment" name="voter-comment">
         </div>
-        <button class="btn btn-primary" id="vote-comment" type="button">Submit</button>
+        <button class="btn btn-primary" id="vote-comment" type="button" onclick="voting();">Submit</button>
         <button class="btn btn-primary" id="del-btn" type="button">Delete Appointment</button>
       </form>
       <div id="box">
@@ -90,7 +90,8 @@
           <input type="text" class="form-control" id="creator" name="creator" required>
         </div>
         <h3 class="pb-2">Options:</h3>
-        <button class="btn btn-primary" id="add-option-btn" type="button" onclick="createTimeslotInHtml()">Add Timeslot</button>
+        <button class="btn btn-primary" id="add-option-btn" type="button" onclick="createTimeslotInHtml()">Add
+          Timeslot</button>
         <button class="btn btn-primary" id="submit-btn" type="submit">Create Appointment</button>
       </form>
     </div>

@@ -3,20 +3,15 @@ $(document).ready(function () {
   $('.newApp').hide();
   getAppointments();
   $('.list-group').on('click', '.list-group-item', function () {
-    // pass the clicked element as a parameter
-    showdetails(this);
+    showDetails(this);
   });
   $('#appointment-form').on('submit', function (event) {
     event.preventDefault();
-    savetoDatabase();
+    saveToDatabase();
   });
   $('#del-btn').on('click', function () {
-    let app_id = parseInt($("#detail-id").text());
-    deletedata("deleteAppointment", app_id);
-  });
-  $('#vote-comment').on('click', function () {
-    comment();
-    voting();
+    let appId = parseInt($("#detail-id").text());
+    deleteData("deleteAppointment", appId);
   });
 });
 
@@ -26,18 +21,19 @@ const form = document.querySelector("#appointment-form");
 function createTimeslotInHtml() {
   const newInput = document.createElement("div");
   newInput.innerHTML = `
-  <div class="row" id = "option-row">
-  <div class="input-box col"> <input type="datetime-local" id="option-start" name="option-start" required> </div>
-  <div class="input-box col"> <input type="datetime-local" id="option-end" name="option-end" required> </div>
-  </div>
+    <div class="row" id="option-row">
+      <div class="input-box col">
+        <input type="datetime-local" id="option-start" name="option-start" required>
+      </div>
+      <div class="input-box col">
+        <input type="datetime-local" id="option-end" name="option-end" required>
+      </div>
+    </div>
   `;
   form.insertBefore(newInput, addOptionBtn);
 }
 
-
-
-function showdetails(element) {
-  // use the passed element to get data-id
+function showDetails(element) {
   var appointmentId = $(element).data('id');
   if (appointmentId != null) {
     $.ajax({
@@ -49,7 +45,6 @@ function showdetails(element) {
       success: function (response) {
         addOptionToDetails(appointmentId);
         Votes(appointmentId);
-        // add the details into the prepared spans
         var appointment = response[0];
         $('#detail-id').append(appointment.id);
         $('#detail-name').append(appointment.name);
@@ -58,16 +53,14 @@ function showdetails(element) {
         $('#detail-start').append(appointment.vote_start);
         $('#detail-end').append(appointment.vote_end);
         $('#detail-creator').append(appointment.creator);
-        //hide other parts and show only the details
         $('.wrapper > .h2').hide();
         $('.list-group').hide();
         $('.Details').show();
-        // if the appointment has the class "over" then disable the inputs
         if ($('.mylistitem[data-id="' + appointmentId + '"]').hasClass('over')) {
           $('form input').prop('disabled', true);
           $('form button').prop('disabled', true);
         }
-        loadComments()
+        loadComments();
       },
       error: function (err) {
         console.log(err);
@@ -83,14 +76,13 @@ function Votes(id) {
     cache: false,
     data: { method: "queryAppointmentVotes", param: id },
     dataType: "json",
-    success: function (response) {
-    },
+    success: function (response) { },
     error: function (err) {
       console.log(err);
     }
-  })
+  });
 }
-// adding the voteable timeslots
+
 function addOptionToDetails(id) {
   $.ajax({
     type: "POST",
@@ -101,12 +93,10 @@ function addOptionToDetails(id) {
     success: function (response) {
       var options = response;
       var optionDiv = $('<div>').addClass('option-div');
-      // add for each option with given appointment id
       $.each(options, function (i, option) {
         var start = option.start;
         var end = option.end;
         var id = option.optionId;
-        // adding them as checkbox
         var optionItem = $('<div>').addClass('form-check');
         var label = $('<label>').addClass('form-check-label').text(start + ' to ' + end);
         var input = $('<input>').addClass('form-check-input').attr({
@@ -127,15 +117,15 @@ function addOptionToDetails(id) {
     }
   });
 }
-//hide everything except +
+
 $('#add-app-link').on('click', function () {
   $('.wrapper > .h2').hide();
   $('.list-group').hide();
   $('.Details').hide();
   $('.newApp').show();
 });
-// saves data into db
-function savetoDatabase() {
+
+function saveToDatabase() {
   var name = document.getElementById('name').value;
   var location = document.getElementById('location').value;
   var description = document.getElementById('description').value;
@@ -158,10 +148,8 @@ function savetoDatabase() {
     data: { method: "createNewAppointment", param: data },
     dataType: "json",
     success: function (response) {
-      // get the last insert ID from the response
-      var ap_id = response[1];
-      // also save the given time slot options into the Options table
-      saveOptions(ap_id);
+      var apId = response[1];
+      saveOptions(apId);
       alert("Created Appointment");
       window.location.reload();
     },
@@ -181,10 +169,10 @@ function voting() {
   });
 
   if (selectedOptions.length > 0) {
-    var completedRequests = 0; // Counter for completed AJAX requests
+    var completedRequests = 0;
     var totalRequests = selectedOptions.length;
 
-    selectedOptions.forEach(function(optionId) {
+    selectedOptions.forEach(function (optionId) {
       var data = {
         ap_id: appointmentId,
         op_id: optionId,
@@ -198,37 +186,35 @@ function voting() {
         data: { method: "createNewVoting", param: data },
         dataType: "json",
         success: function (response) {
-          console.log(response); // Log the response for debugging
+          alert("Voting successfull");
+          console.log(response);
           completedRequests++;
           if (completedRequests === totalRequests) {
-            // All requests completed, now call comment() function
             comment();
           }
         },
         error: function (err) {
-          console.log(err); // Log the error for debugging
-          alert("Error occurred while voting. Please try again later."); // Display error message
+          console.log(err);
+          alert("Error occurred while voting. Please try again later.");
         }
       });
     });
   } else {
-    alert("You have not chosen an option. If this was a mistake, please choose one."); // Improved alert message
+    alert("You have not chosen an option. If this was a mistake, please choose one.");
   }
 
-  $("#voter").val(""); // Set back to empty
+  $("#voter").val("");
 }
-// saving options
-function saveOptions(ap_id) {
-  // get all option-rows
+
+function saveOptions(apId) {
   let rows = document.querySelectorAll("#option-row");
-  // for each row save into database 
   rows.forEach(function (row) {
-    let start_op = row.querySelector("#option-start").value;
-    let end_op = row.querySelector("#option-end").value;
+    let startOp = row.querySelector("#option-start").value;
+    let endOp = row.querySelector("#option-end").value;
     const data = {
-      ap_id: ap_id,
-      op_start: start_op,
-      op_end: end_op,
+      ap_id: apId,
+      op_start: startOp,
+      op_end: endOp,
     };
     $.ajax({
       type: "POST",
@@ -245,7 +231,7 @@ function saveOptions(ap_id) {
     });
   });
 }
-//display  appointments in list
+
 function getAppointments() {
   $.ajax({
     type: "POST",
@@ -256,12 +242,10 @@ function getAppointments() {
     success: function (response) {
       var appointments = response;
       var listGroup = $('.list-group');
-      // compare current date with vote-end date 
       var currentDate = new Date();
       $.each(appointments, function (i, appointment) {
         var listItem = $('<a>').attr({
           href: '#',
-          // check if vote end date is already passed
           class: 'list-group-item list-group-item-action mylistitem' + (currentDate > new Date(appointment.vote_end) ? ' over' : ''),
           'data-id': appointment.id,
         }).text(appointment.name);
@@ -275,46 +259,44 @@ function getAppointments() {
   });
 }
 
-function loaddata(searchmethode, searchterm, itemtype) {
+function loadData(searchMethod, searchTerm, itemType) {
   $.ajax({
     type: "GET",
     url: "../backend/serviceHandler.php",
     cache: false,
-    data: { method: searchmethode, param: searchterm },
+    data: { method: searchMethod, param: searchTerm },
     dataType: "json",
     success: function (response) {
-      //   console.log("Response: ", response)
       response.forEach(el => {
         if (el) {
-          console.log(el)
-          $("#container").append($("<p>").text(`${itemtype}(id=${el.id}, ${el}`))
+          console.log(el);
+          $("#container").append($("<p>").text(`${itemType}(id=${el.id}, ${el}`));
         }
       });
     }
   });
 }
 
-function writedata(searchmethode, searchterm) {
+function writeData(searchMethod, searchTerm) {
   $.ajax({
     type: "POST",
     url: "../backend/serviceHandler.php",
     cache: false,
-    data: { method: searchmethode, param: searchterm },
+    data: { method: searchMethod, param: searchTerm },
     dataType: "json",
-    success: function (response) {
-    },
+    success: function (response) { },
     error: function (err) {
       console.log(err);
     }
   });
 }
 
-function deletedata(searchmethode, searchterm) {
+function deleteData(searchMethod, searchTerm) {
   $.ajax({
     type: "DELETE",
     url: "../backend/serviceHandler.php",
     cache: false,
-    data: { method: searchmethode, param: searchterm },
+    data: { method: searchMethod, param: searchTerm },
     dataType: "json",
     success: function (response) {
       window.location.replace("index.html");
@@ -326,15 +308,15 @@ function deletedata(searchmethode, searchterm) {
 }
 
 function loadComments() {
-  let app_id = parseInt($("#detail-id").text());
+  let appId = parseInt($("#detail-id").text());
   $.ajax({
     type: "GET",
     url: "../backend/serviceHandler.php",
     cache: false,
-    data: { method: "queryAppointmentComments", param: app_id },
+    data: { method: "queryAppointmentComments", param: appId },
     dataType: "json",
     success: function (response) {
-      $("#list-comments").children().remove()
+      $("#list-comments").children().remove();
       response.forEach(el => {
         if (el) {
           $("#list-comments").append($("<p>")).append($("<strong>").text(el.author + ": ")).append($("<span>").text(el.text));
@@ -345,25 +327,25 @@ function loadComments() {
 }
 
 function comment() {
-  let app_id = parseInt($("#detail-id").text());
-  let voterName = $("#voter").val()
-  let commentText = $("#voter-comment").val()
-  let votes = $("input:checked").toArray()
+  let appId = parseInt($("#detail-id").text());
+  let voterName = $("#voter").val();
+  let commentText = $("#voter-comment").val();
+  let votes = $("input:checked").toArray();
   if (commentText != "" && voterName != "") {
     $.ajax({
       type: "POST",
       url: "../backend/serviceHandler.php",
       cache: false,
-      data: { method: "createNewComment", param: { "ap_id": app_id, "author_name": voterName, "comment_text": commentText } },
+      data: { method: "createNewComment", param: { "ap_id": appId, "author_name": voterName, "comment_text": commentText } },
       dataType: "json",
       success: function (response) {
-        loadComments()
+        alert("Commeting Successfull");
+        loadComments();
       },
       error: function (err) {
         console.log(err);
       }
     });
   }
-  $("#voter-comment").val("")
-
+  $("#voter-comment").val("");
 }
