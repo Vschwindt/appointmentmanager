@@ -1,3 +1,6 @@
-database_name: bifwebscripting
-username: bif2webscriptinguser
-password: bif2021
+{
+    "database_name": "bifwebscripting",
+    "username": "bif2webscriptinguser",
+    "password": "bif2021"
+  }
+  
