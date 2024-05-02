@@ -1,20 +1,22 @@
 <?php
-// should probably have this in a generel config file
-$db_host = 'localhost';
-$db_user = 'bif2webscriptinguser';
-$db_password = 'bif2021';
-$db_db = 'semesterprojekt2';
+// Database configuration
+$db_config = [
+    'host' => 'localhost',
+    'username' => 'bif2webscriptinguser',
+    'password' => 'bif2021',
+    'database' => 'semesterprojekt2'
+];
 
+// Attempt to connect to the database
 $mysqli = @new mysqli(
-  $db_host,
-  $db_user,
-  $db_password,
-  $db_db
+    $db_config['host'],
+    $db_config['username'],
+    $db_config['password'],
+    $db_config['database']
 );
 
+// Check for connection errors
 if ($mysqli->connect_error) {
-  echo 'Errno: ' . $mysqli->connect_errno;
-  echo '<br>';
-  echo 'Error: ' . $mysqli->connect_error;
-  exit();
+    echo 'Connection Error: ' . $mysqli->connect_error;
+    exit();
 }

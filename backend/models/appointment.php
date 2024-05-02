@@ -9,6 +9,7 @@ class Appointment
   public $vote_end;
   public $creator;
 
+  // Constructor to initialize Appointment object
   function __construct($id, $name, $location, $description, $vote_start, $vote_end, $creator)
   {
     $this->id = $id;

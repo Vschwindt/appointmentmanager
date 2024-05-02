@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Planer</title>
+  <title>Appointment Manager</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
-  <link rel="stylesheet" href="css/mystyle.css" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 
 <body>
@@ -47,7 +42,6 @@
           <label for="voter" class="form-label">Name</label>
           <input type="text" class="form-control" id="voter" name="voter" required>
         </div>
-        <h3>Options:</h3>
         <div class="appointment option mt-2"></div>
         <h3 class="mt-2">Comments:</h3>
         <div id="list-comments"></div>
@@ -75,32 +69,32 @@
           <div id="locationHelp" class="form-text">Please enter the Location at which the appointment is held</div>
         </div>
         <div class="mb-3">
-          <label for="description" class="form-label">Email address</label>
+          <label for="description" class="form-label">Description</label>
           <input type="text" class="form-control" id="description" name="description"
             aria-describedby="descriptionHelp">
           <div id="descriptionHelp" class="form-text">Add a description to the appointment</div>
         </div>
         <div class="row">
           <div class="input-box col">
+            <h5>Start date</h5>
             <input type="datetime-local" id="start" name="start" required>
-            <h5>Vote-Start</h5>
           </div>
           <div class="input-box col">
+            <h5>End date</h5>
             <input type="datetime-local" id="end" name="end" required>
-            <h5>Vote-End</h5>
           </div>
         </div>
         <div class="mb-3">
           <label for="creator" class="form-label">Creator</label>
           <input type="text" class="form-control" id="creator" name="creator" required>
         </div>
-        <h2>Options: </h2>
-        <button class="btn btn-primary" id="add-option-btn" type="button">Add Timeslot</button>
+        <h3 class="pb-2">Options:</h3>
+        <button class="btn btn-primary" id="add-option-btn" type="button" onclick="createTimeslotInHtml()">Add Timeslot</button>
         <button class="btn btn-primary" id="submit-btn" type="submit">Create Appointment</button>
       </form>
     </div>
   </div>
-  <script src="./js/js.js"></script>
+  <script src="./js/script.js"></script>
 </body>
 
 </html>

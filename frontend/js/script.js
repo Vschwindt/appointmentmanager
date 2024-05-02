@@ -23,7 +23,7 @@ $(document).ready(function () {
 const addOptionBtn = document.querySelector("#add-option-btn");
 const form = document.querySelector("#appointment-form");
 
-addOptionBtn.addEventListener("click", () => {
+function createTimeslotInHtml() {
   const newInput = document.createElement("div");
   newInput.innerHTML = `
   <div class="row" id = "option-row">
@@ -32,7 +32,9 @@ addOptionBtn.addEventListener("click", () => {
   </div>
   `;
   form.insertBefore(newInput, addOptionBtn);
-});
+}
+
+
 
 function showdetails(element) {
   // use the passed element to get data-id
@@ -103,12 +105,12 @@ function addOptionToDetails(id) {
       $.each(options, function (i, option) {
         var start = option.start;
         var end = option.end;
-        var id = option.op_id;
+        var id = option.optionId;
         // adding them as checkbox
         var optionItem = $('<div>').addClass('form-check');
         var label = $('<label>').addClass('form-check-label').text(start + ' to ' + end);
         var input = $('<input>').addClass('form-check-input').attr({
-          "data-optid": option.op_id,
+          "data-optid": option.optionId,
           type: 'checkbox',
           name: 'option',
           value: start + ' to ' + end,
@@ -117,7 +119,7 @@ function addOptionToDetails(id) {
         optionItem.append(input).append(label);
         optionDiv.append(optionItem);
       });
-      $('.appointment.option').html('<h3>voteable appointment options:</h3>');
+      $('.appointment.option').html('<h3>Vote on Option</h3>');
       $('.appointment.option').append(optionDiv);
     },
     error: function (err) {
@@ -171,19 +173,24 @@ function savetoDatabase() {
 
 function voting() {
   var appointmentId = parseInt($('#detail-id').text());
-  var name = document.getElementById('voter').value;
+  var name = $('#voter').val();
   var selectedOptions = [];
-  // array of all checked options ids
+
   $('input[name="option"]:checked').each(function () {
     selectedOptions.push($(this).data('id'));
   });
+
   if (selectedOptions.length > 0) {
-    for (var i = 0; i < selectedOptions.length; i++) {
+    var completedRequests = 0; // Counter for completed AJAX requests
+    var totalRequests = selectedOptions.length;
+
+    selectedOptions.forEach(function(optionId) {
       var data = {
         ap_id: appointmentId,
-        op_id: selectedOptions[i],
-        voter_name: name,
+        op_id: optionId,
+        voter_name: name
       };
+
       $.ajax({
         type: "POST",
         url: "../backend/serviceHandler.php",
@@ -191,19 +198,24 @@ function voting() {
         data: { method: "createNewVoting", param: data },
         dataType: "json",
         success: function (response) {
-          alert("Voting Successfull");
-          window.location.reload();
+          console.log(response); // Log the response for debugging
+          completedRequests++;
+          if (completedRequests === totalRequests) {
+            // All requests completed, now call comment() function
+            comment();
+          }
         },
         error: function (err) {
-          console.log(err);
+          console.log(err); // Log the error for debugging
+          alert("Error occurred while voting. Please try again later."); // Display error message
         }
       });
-    }
+    });
+  } else {
+    alert("You have not chosen an option. If this was a mistake, please choose one."); // Improved alert message
   }
-  else {
-    alert("You have not chosen an option, if this was a mistake please chose one")
-  }
-  $("#voter").val("") //set back to empty
+
+  $("#voter").val(""); // Set back to empty
 }
 // saving options
 function saveOptions(ap_id) {

@@ -1,16 +1,17 @@
 <?php
 class Voting
 {
-  public $v_id;
-  public $ap_id;
-  public $op_id;
-  public $voter_name;
+  public $votingId;
+  public $appointmentId;
+  public $optionId;
+  public $voterName;
 
-  function __construct($v_id, $ap_id, $op_id, $voter_name)
+  // Constructor to initialize Voting object
+  function __construct($votingId, $appointmentId, $optionId, $voterName)
   {
-    $this->v_id = $v_id;
-    $this->ap_id = $ap_id;
-    $this->op_id = $op_id;
-    $this->voter_name = $voter_name;
+    $this->votingId = $votingId;
+    $this->appointmentId = $appointmentId;
+    $this->optionId = $optionId;
+    $this->voterName = $voterName;
   }
 }

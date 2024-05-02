@@ -2,14 +2,15 @@
 class Comment
 {
   public $id;
-  public $ap_id;
+  public $appointmentId;
   public $author;
   public $text;
 
-  function __construct($id, $ap_id, $author, $text)
+  // Constructor to initialize Comment object
+  function __construct($id, $appointmentId, $author, $text)
   {
     $this->id = $id;
-    $this->ap_id = $ap_id;
+    $this->appointmentId = $appointmentId;
     $this->author = $author;
     $this->text = $text;
   }
