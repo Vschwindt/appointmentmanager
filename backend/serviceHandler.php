@@ -5,7 +5,8 @@ $param = "";
 $method = $_SERVER["REQUEST_METHOD"];
 
 // Function to handle requests
-function handleRequest($logic, $method, $param) {
+function handleRequest($logic, $method, $param)
+{
     $result = $logic->handleRequest($method, $param);
     if ($result === null) {
         response($method, 400, null);
@@ -36,7 +37,8 @@ switch ($method) {
 }
 
 // Function to send response
-function response($method, $httpStatus, $data) {
+function response($method, $httpStatus, $data)
+{
     header('Content-Type: application/json');
     http_response_code($httpStatus);
     echo json_encode($data);
